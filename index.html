@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Credit Match</title>
+<style>
+:root{
+  --bg1:#0b1220;
+  --bg2:#111827;
+  --card:rgba(255,255,255,.96);
+  --glass:rgba(255,255,255,.12);
+  --text:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --blue:#2563eb;
+  --blue2:#4f46e5;
+  --green:#16a34a;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --shadow:0 22px 60px rgba(2,6,23,.24);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(59,130,246,.28), transparent 35%),
+    radial-gradient(circle at top right, rgba(168,85,247,.18), transparent 28%),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+}
+.wrap{max-width:460px;margin:0 auto;padding:18px 14px 36px}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;color:#fff;
+}
+.brand{font-weight:900;letter-spacing:-.04em;font-size:22px}
+.pill{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.12);
+}
+.hero{
+  color:#fff;
+  padding:4px 2px 10px;
+}
+.hero h1{
+  font-size:30px;
+  line-height:1.03;
+  margin:0;
+  letter-spacing:-.04em;
+}
+.hero p{
+  margin-top:8px;
+  color:rgba(255,255,255,.78);
+  line-height:1.5;
+  font-size:14px;
+}
+.kpis{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.kpi{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:12px;
+  backdrop-filter:blur(12px);
+}
+.kpi .num{font-size:18px;font-weight:900;color:#fff}
+.kpi .lbl{font-size:11px;color:rgba(255,255,255,.72);margin-top:3px;font-weight:700}
+.progress-wrap{
+  margin:12px 0 0;
+}
+.progress-head{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:rgba(255,255,255,.78);
+  margin-bottom:7px;
+  font-weight:700;
+}
+.progress{
+  height:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+}
+.progress > div{
+  width:68%;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#22c55e,#3b82f6,#8b5cf6);
+}
+.card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+  margin:14px 0;
+}
+h1,h2,p{margin:0}
+h2{font-size:18px;margin-bottom:10px;letter-spacing:-.02em}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:12px}
+.two{grid-template-columns:1fr 1fr}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:12px;font-weight:800;color:#334155}
+input,select,textarea{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  font:inherit;
+  background:#fff;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+textarea{min-height:88px;resize:vertical}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  padding:14px 16px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#fff;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  margin-top:14px;
+  box-shadow:0 14px 24px rgba(37,99,235,.24);
+}
+.btn.secondary{
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+}
+.stat:last-child{border-bottom:none}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  background:#f1f5f9;
+}
+.b-excellent{background:#dcfce7;color:#166534}
+.b-good{background:#dbeafe;color:#1d4ed8}
+.b-fair{background:#fef3c7;color:#92400e}
+.b-needs{background:#fee2e2;color:#991b1b}
+.offer{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  margin-top:10px;
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
+}
+.offer-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:8px;
+}
+.offer-title{font-weight:900;font-size:15px}
+.offer-meta{font-size:12px;color:var(--muted);margin-top:4px}
+.disclosure{
+  border-left:4px solid var(--amber);
+  background:#fff7ed;
+  padding:12px;
+  border-radius:14px;
+  font-size:12px;
+  color:#9a3412;
+  line-height:1.45;
+}
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.mini{font-size:11px;color:var(--muted);font-weight:800}
+.footer-note{
+  margin-top:12px;
+  font-size:11px;
+  color:rgba(255,255,255,.72);
+  text-align:center;
+}
+.locked{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:stretch;
+}
+.lock-banner{
+  background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(79,70,229,.08));
+  border:1px solid #dbeafe;
+  color:#1e3a8a;
+  padding:12px;
+  border-radius:16px;
+  font-size:13px;
+  line-height:1.45;
+}
+.hidden{display:none !important;}
+.privacy-link{
+  font-size:12px;
+  color:#1d4ed8;
+  text-decoration:underline;
+  font-weight:800;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Credit Match</div>
+    <div class="pill">Lead Capture</div>
+  </div>
+
+  <div class="hero">
+    <h1>Find the right tradeline targets fast</h1>
+    <p>Enter a credit snapshot, unlock exact target ranges, and get a cleaner path to reviewing offers.</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="num">3</div><div class="lbl">Target outputs</div></div>
+      <div class="kpi"><div class="num">1 tap</div><div class="lbl">To generate</div></div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-head"><span>Profile fit</span><span id="fitPct">68%</span></div>
+      <div class="progress"><div id="fitBar"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Build a stronger profile</h2>
+    <p class="muted">Enter your details below. Results unlock after email submission.</p>
+    <div class="divider"></div>
+
+    <div class="grid two">
+      <div class="field">
+        <label>Goal type</label>
+        <select id="goalType">
+          <option>Personal loan</option>
+          <option>Business funding</option>
+          <option>Credit card</option>
+          <option>Debt consolidation</option>
+          <option>Build credit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Urgency</label>
+        <select id="urgency">
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Score band</label>
+        <select id="scoreBand">
+          <option>Needs work (300–579)</option>
+          <option>Fair (580–669)</option>
+          <option selected>Good (670–739)</option>
+          <option>Excellent (740–850)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hard inquiries - Equifax</label>
+        <input id="equifaxInq" type="number" min="0" step="1" placeholder="Enter number" />
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Hard inquiries - Experian</label>
+        <input id="experianInq" type="number" min="0" step="1" placeholder="Enter number" />
+      </div>
+      <div class="field">
+        <label>Hard inquiries - TransUnion</label>
+        <input id="transunionInq" type="number" min="0" step="1" placeholder="Enter number" />
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Total accounts</label>
+        <input id="totalAccounts" type="number" min="0" step="1" placeholder="Enter number" />
+      </div>
+      <div class="field">
+        <label>Open accounts</label>
+        <input id="openAccounts" type="number" min="0" step="1" placeholder="Enter number" />
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Credit card utilization</label>
+        <select id="utilization">
+          <option>Excellent (0–9%)</option>
+          <option>Good (10–29%)</option>
+          <option>Fair (30–49%)</option>
+          <option>Needs work (50–100%)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Annual personal income</label>
+        <select id="personalIncome">
+          <option>0–50k</option>
+          <option>50k–100k</option>
+          <option>100k–200k</option>
+          <option>200k–300k</option>
+          <option>Above 300k</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Annual business revenue</label>
+        <select id="businessRevenue">
+          <option>0–50k</option>
+          <option>50k–100k</option>
+          <option>100k–200k</option>
+          <option>200k–300k</option>
+          <option>Above 300k</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Average age of open accounts</label>
+        <select id="avgOpenAge">
+          <option>Needs work (0–5 years)</option>
+          <option>Fair (5–6 years)</option>
+          <option>Good (7–8 years)</option>
+          <option>Excellent (9+ years)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid two" style="margin-top:10px;">
+      <div class="field">
+        <label>Total available credit</label>
+        <select id="availableCredit">
+          <option>Needs work ($0–$9,999)</option>
+          <option>Fair ($10,000–$24,999)</option>
+          <option>Good ($25,000–$49,999)</option>
+          <option>Excellent ($50,000+)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Payment history band</label>
+        <select id="paymentBand">
+          <option>Excellent (100%)</option>
+          <option>Good (99%)</option>
+          <option selected>Fair (98%)</option>
+          <option>Bad (0–97%)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:10px;">
+      <label>User notes</label>
+      <textarea id="userNotes" placeholder="Example: Looking for a faster path to approval without opening new debt."></textarea>
+    </div>
+  </div>
+
+  <div class="card" id="emailGate">
+    <div class="section-title">
+      <h2>Unlock results</h2>
+      <div class="mini">Required</div>
+    </div>
+    <div class="lock-banner">
+      Enter your email to reveal exact age, limit, and count targets. We’ll also send the results to your inbox.
+    </div>
+
+    <div class="grid" style="margin-top:12px;">
+      <div class="field">
+        <label>Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+      </div>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#475569;font-weight:700;line-height:1.4;">
+        <input id="consent" type="checkbox" style="width:18px;height:18px;margin-top:2px;" />
+        I agree to receive my results by email and optional updates. <a class="privacy-link" href="#" aria-label="Privacy Policy">Privacy Policy</a>
+      </label>
+      <button class="btn" id="unlockBtn" type="button">Unlock Results</button>
+      <button class="btn secondary hidden" id="changeEmailBtn" type="button">Change Email</button>
+      <div class="mini" id="emailStatus" style="text-align:center;"></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="summaryCard">
+    <div class="section-title">
+      <h2>Profile summary</h2>
+      <div class="mini">Live values</div>
+    </div>
+    <div class="stat"><span>Average age of open accounts</span><span class="badge b-good" id="sumAvgOpenAge">Good</span></div>
+    <div class="stat"><span>Total available credit</span><span class="badge b-good" id="sumAvailableCredit">Good</span></div>
+    <div class="stat"><span>Payment history</span><span class="badge b-fair" id="sumPaymentHistory">Fair</span></div>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <div class="section-title">
+      <h2>Suggested tradelines</h2>
+      <div class="mini">Exact targets</div>
+    </div>
+    <div id="recommendations"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">
+      <h2>Consent & disclosure</h2>
+      <div class="mini">Required</div>
+    </div>
+    <div class="disclosure">Recommendations are educational and not approvals or guarantees.</div>
+  </div>
+
+  <div class="footer-note">Static prototype for layout testing only.</div>
+</div>
+
+<script>
+function val(id){ return document.getElementById(id).value || ''; }
+function ageTarget(v){ if(v.includes('Needs work')) return '10–15 years'; if(v.includes('Fair')) return '8–12 years'; if(v.includes('Good')) return '6–10 years'; return '9+ years'; }
+function limitTarget(v){ if(v.includes('Needs work')) return '$15,000–$25,000+'; if(v.includes('Fair')) return '$10,000–$20,000'; if(v.includes('Good')) return '$25,000+'; return '$25,000+'; }
+function countTarget(age, credit, payment){ let n=1; if(age.includes('Needs work')||age.includes('Fair')) n++; if(credit.includes('Needs work')||credit.includes('Fair')) n++; if(payment.includes('Bad')||payment.includes('Fair')) n++; return Math.min(3,n); }
+function renderResults(){
+  const age = val('avgOpenAge');
+  const credit = val('availableCredit');
+  const payment = val('paymentBand');
+  document.getElementById('sumAvgOpenAge').textContent = age;
+  document.getElementById('sumAvailableCredit').textContent = credit;
+  document.getElementById('sumPaymentHistory').textContent = payment;
+  const c = countTarget(age, credit, payment);
+  const a = ageTarget(age);
+  const l = limitTarget(credit);
+  document.getElementById('recommendations').innerHTML = `
+    <div class="offer">
+      <div class="offer-top">
+        <div>
+          <div class="offer-title">Exact age target</div>
+          <div class="offer-meta">${a}</div>
+        </div>
+        <div class="badge b-excellent">Target</div>
+      </div>
+      <p class="muted" style="font-size:12px;line-height:1.45;">Use this age range when selecting a tradeline to improve average age.</p>
+    </div>
+    <div class="offer">
+      <div class="offer-top">
+        <div>
+          <div class="offer-title">Exact limit target</div>
+          <div class="offer-meta">${l}</div>
+        </div>
+        <div class="badge b-good">Target</div>
+      </div>
+      <p class="muted" style="font-size:12px;line-height:1.45;">Use this credit limit range when selecting a tradeline to improve available credit and utilization.</p>
+    </div>
+    <div class="offer">
+      <div class="offer-top">
+        <div>
+          <div class="offer-title">Exact count target</div>
+          <div class="offer-meta">${c} tradeline${c > 1 ? 's' : ''}</div>
+        </div>
+        <div class="badge b-fair">Target</div>
+      </div>
+      <p class="muted" style="font-size:12px;line-height:1.45;">This is the number of tradelines suggested based on the current gaps.</p>
+    </div>
+  `;
+  document.getElementById('summaryCard').classList.remove('hidden');
+  document.getElementById('resultsCard').classList.remove('hidden');
+  document.getElementById('fitPct').textContent = '68%';
+  document.getElementById('fitBar').style.width = '68%';
+}
+
+document.getElementById('unlockBtn').addEventListener('click', () => {
+  const email = val('email').trim();
+  const consent = document.getElementById('consent').checked;
+  const status = document.getElementById('emailStatus');
+
+  if(!email || !email.includes('@')){
+    status.textContent = 'Please enter a valid email address.';
+    status.style.color = '#b91c1c';
+    return;
+  }
+  if(!consent){
+    status.textContent = 'Please check the consent box to continue.';
+    status.style.color = '#b91c1c';
+    return;
+  }
+
+  status.textContent = 'Results unlocked. Check your email for a copy.';
+  status.style.color = '#166534';
+  renderResults();
+  document.getElementById('unlockBtn').classList.add('hidden');
+  document.getElementById('changeEmailBtn').classList.remove('hidden');
+});
+
+document.getElementById('changeEmailBtn').addEventListener('click', () => {
+  document.getElementById('unlockBtn').classList.remove('hidden');
+  document.getElementById('changeEmailBtn').classList.add('hidden');
+  document.getElementById('resultsCard').classList.add('hidden');
+  document.getElementById('summaryCard').classList.add('hidden');
+  document.getElementById('emailStatus').textContent = '';
+});
+</script>
+</body>
+</html>
