@@ -153,6 +153,10 @@ textarea{min-height:88px;resize:vertical}
   border:1px solid var(--line);
   box-shadow:none;
 }
+.btn:disabled{
+  opacity:.75;
+  cursor:not-allowed;
+}
 .divider{height:1px;background:var(--line);margin:14px 0}
 .stat{
   display:flex;
@@ -234,6 +238,17 @@ textarea{min-height:88px;resize:vertical}
   text-decoration:underline;
   font-weight:800;
 }
+.status{
+  min-height:18px;
+  font-size:12px;
+  font-weight:800;
+  text-align:center;
+  padding-top:4px;
+}
+.loading{
+  opacity:.75;
+  pointer-events:none;
+}
 </style>
 </head>
 <body>
@@ -263,158 +278,150 @@ textarea{min-height:88px;resize:vertical}
     <p class="muted">Enter your details below. Results unlock after email submission.</p>
     <div class="divider"></div>
 
-    <div class="grid two">
-      <div class="field">
-        <label>Goal type</label>
-        <select id="goalType">
-          <option>Personal loan</option>
-          <option>Business funding</option>
-          <option>Credit card</option>
-          <option>Debt consolidation</option>
-          <option>Build credit</option>
-        </select>
+    <form id="leadForm">
+      <div class="grid two">
+        <div class="field">
+          <label>First name</label>
+          <input id="firstName" type="text" placeholder="Enter first name" required />
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" required />
+        </div>
       </div>
-      <div class="field">
-        <label>Urgency</label>
-        <select id="urgency">
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Score band</label>
-        <select id="scoreBand">
-          <option>Needs work (300–579)</option>
-          <option>Fair (580–669)</option>
-          <option selected>Good (670–739)</option>
-          <option>Excellent (740–850)</option>
-        </select>
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Goal type</label>
+          <select id="goalType">
+            <option>Personal loan</option>
+            <option>Business funding</option>
+            <option>Credit card</option>
+            <option>Debt consolidation</option>
+            <option>Build credit</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Urgency</label>
+          <select id="urgency">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Hard inquiries - Equifax</label>
-        <input id="equifaxInq" type="number" min="0" step="1" placeholder="Enter number" />
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Hard inquiries - Experian</label>
-        <input id="experianInq" type="number" min="0" step="1" placeholder="Enter number" />
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Score band</label>
+          <select id="scoreBand">
+            <option>Needs work (300–579)</option>
+            <option>Fair (580–669)</option>
+            <option selected>Good (670–739)</option>
+            <option>Excellent (740–850)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hard inquiries - Equifax</label>
+          <input id="equifaxInq" type="number" min="0" step="1" placeholder="Enter number" />
+        </div>
       </div>
-      <div class="field">
-        <label>Hard inquiries - TransUnion</label>
-        <input id="transunionInq" type="number" min="0" step="1" placeholder="Enter number" />
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Total accounts</label>
-        <input id="totalAccounts" type="number" min="0" step="1" placeholder="Enter number" />
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Hard inquiries - Experian</label>
+          <input id="experianInq" type="number" min="0" step="1" placeholder="Enter number" />
+        </div>
+        <div class="field">
+          <label>Hard inquiries - TransUnion</label>
+          <input id="transunionInq" type="number" min="0" step="1" placeholder="Enter number" />
+        </div>
       </div>
-      <div class="field">
-        <label>Open accounts</label>
-        <input id="openAccounts" type="number" min="0" step="1" placeholder="Enter number" />
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Credit card utilization</label>
-        <select id="utilization">
-          <option>Excellent (0–9%)</option>
-          <option>Good (10–29%)</option>
-          <option>Fair (30–49%)</option>
-          <option>Needs work (50–100%)</option>
-        </select>
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Total accounts</label>
+          <input id="totalAccounts" type="number" min="0" step="1" placeholder="Enter number" />
+        </div>
+        <div class="field">
+          <label>Open accounts</label>
+          <input id="openAccounts" type="number" min="0" step="1" placeholder="Enter number" />
+        </div>
       </div>
-      <div class="field">
-        <label>Annual personal income</label>
-        <select id="personalIncome">
-          <option>0–50k</option>
-          <option>50k–100k</option>
-          <option>100k–200k</option>
-          <option>200k–300k</option>
-          <option>Above 300k</option>
-        </select>
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Annual business revenue</label>
-        <select id="businessRevenue">
-          <option>0–50k</option>
-          <option>50k–100k</option>
-          <option>100k–200k</option>
-          <option>200k–300k</option>
-          <option>Above 300k</option>
-        </select>
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Credit card utilization</label>
+          <select id="utilization">
+            <option>Excellent (0–9%)</option>
+            <option>Good (10–29%)</option>
+            <option>Fair (30–49%)</option>
+            <option>Needs work (50–100%)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Annual personal income</label>
+          <select id="personalIncome">
+            <option>0–50k</option>
+            <option>50k–100k</option>
+            <option>100k–200k</option>
+            <option>200k–300k</option>
+            <option>Above 300k</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Average age of open accounts</label>
-        <select id="avgOpenAge">
-          <option>Needs work (0–5 years)</option>
-          <option>Fair (5–6 years)</option>
-          <option>Good (7–8 years)</option>
-          <option>Excellent (9+ years)</option>
-        </select>
-      </div>
-    </div>
 
-    <div class="grid two" style="margin-top:10px;">
-      <div class="field">
-        <label>Total available credit</label>
-        <select id="availableCredit">
-          <option>Needs work ($0–$9,999)</option>
-          <option>Fair ($10,000–$24,999)</option>
-          <option>Good ($25,000–$49,999)</option>
-          <option>Excellent ($50,000+)</option>
-        </select>
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Annual business revenue</label>
+          <select id="businessRevenue">
+            <option>0–50k</option>
+            <option>50k–100k</option>
+            <option>100k–200k</option>
+            <option>200k–300k</option>
+            <option>Above 300k</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Average age of open accounts</label>
+          <select id="avgOpenAge">
+            <option>Needs work (0–5 years)</option>
+            <option>Fair (5–6 years)</option>
+            <option>Good (7–8 years)</option>
+            <option>Excellent (9+ years)</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Payment history band</label>
-        <select id="paymentBand">
-          <option>Excellent (100%)</option>
-          <option>Good (99%)</option>
-          <option selected>Fair (98%)</option>
-          <option>Bad (0–97%)</option>
-        </select>
+
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field">
+          <label>Total available credit</label>
+          <select id="availableCredit">
+            <option>Needs work ($0–$9,999)</option>
+            <option>Fair ($10,000–$24,999)</option>
+            <option>Good ($25,000–$49,999)</option>
+            <option>Excellent ($50,000+)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Payment history band</label>
+          <select id="paymentBand">
+            <option>Excellent (100%)</option>
+            <option>Good (99%)</option>
+            <option selected>Fair (98%)</option>
+            <option>Bad (0–97%)</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="field" style="margin-top:10px;">
-      <label>User notes</label>
-      <textarea id="userNotes" placeholder="Example: Looking for a faster path to approval without opening new debt."></textarea>
-    </div>
-  </div>
-
-  <div class="card" id="emailGate">
-    <div class="section-title">
-      <h2>Unlock results</h2>
-      <div class="mini">Required</div>
-    </div>
-    <div class="lock-banner">
-      Enter your email to reveal exact age, limit, and count targets. We’ll also send the results to your inbox.
-    </div>
-
-    <div class="grid" style="margin-top:12px;">
-      <div class="field">
-        <label>Email address</label>
-        <input id="email" type="email" placeholder="you@example.com" />
+      <div class="field" style="margin-top:10px;">
+        <label>User notes</label>
+        <textarea id="userNotes" placeholder="Example: Looking for a faster path to approval without opening new debt."></textarea>
       </div>
-      <label style="display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#475569;font-weight:700;line-height:1.4;">
-        <input id="consent" type="checkbox" style="width:18px;height:18px;margin-top:2px;" />
-        I agree to receive my results by email and optional updates. <a class="privacy-link" href="#" aria-label="Privacy Policy">Privacy Policy</a>
-      </label>
-      <button class="btn" id="unlockBtn" type="button">Unlock Results</button>
-      <button class="btn secondary hidden" id="changeEmailBtn" type="button">Change Email</button>
-      <div class="mini" id="emailStatus" style="text-align:center;"></div>
-    </div>
+
+      <button class="btn" id="unlockBtn" type="submit">Unlock Results</button>
+      <div class="status" id="formStatus"></div>
+    </form>
   </div>
 
   <div class="card hidden" id="summaryCard">
@@ -433,6 +440,7 @@ textarea{min-height:88px;resize:vertical}
       <div class="mini">Exact targets</div>
     </div>
     <div id="recommendations"></div>
+    <div id="emailSuccess" class="lock-banner hidden" style="margin-top:12px;">Results have been emailed to you.</div>
   </div>
 
   <div class="card">
@@ -447,21 +455,57 @@ textarea{min-height:88px;resize:vertical}
 </div>
 
 <script>
-function val(id){ return document.getElementById(id).value || ''; }
-function ageTarget(v){ if(v.includes('Needs work')) return '10–15 years'; if(v.includes('Fair')) return '8–12 years'; if(v.includes('Good')) return '6–10 years'; return '9+ years'; }
-function limitTarget(v){ if(v.includes('Needs work')) return '$15,000–$25,000+'; if(v.includes('Fair')) return '$10,000–$20,000'; if(v.includes('Good')) return '$25,000+'; return '$25,000+'; }
-function countTarget(age, credit, payment){ let n=1; if(age.includes('Needs work')||age.includes('Fair')) n++; if(credit.includes('Needs work')||credit.includes('Fair')) n++; if(payment.includes('Bad')||payment.includes('Fair')) n++; return Math.min(3,n); }
+const el = (id) => document.getElementById(id);
+const val = (id) => el(id).value || '';
+const scoreMap = {
+  "Needs work (300–579)": 420,
+  "Fair (580–669)": 625,
+  "Good (670–739)": 705,
+  "Excellent (740–850)": 780
+};
+
+function ageTarget(v){
+  if(v.includes('Needs work')) return '10–15 years';
+  if(v.includes('Fair')) return '8–12 years';
+  if(v.includes('Good')) return '6–10 years';
+  return '9+ years';
+}
+function limitTarget(v){
+  if(v.includes('Needs work')) return '$15,000–$25,000+';
+  if(v.includes('Fair')) return '$10,000–$20,000';
+  if(v.includes('Good')) return '$25,000+';
+  return '$25,000+';
+}
+function countTarget(age, credit, payment){
+  let n = 1;
+  if(age.includes('Needs work') || age.includes('Fair')) n++;
+  if(credit.includes('Needs work') || credit.includes('Fair')) n++;
+  if(payment.includes('Bad') || payment.includes('Fair')) n++;
+  return Math.min(3, n);
+}
+function recommendationsText(age, credit, payment, count, score){
+  return `Exact age target: ${age}
+Exact limit target: ${credit}
+Exact count target: ${count} tradeline${count > 1 ? 's' : ''}
+
+Score basis: ${score}
+Payment history: ${payment}`;
+}
 function renderResults(){
   const age = val('avgOpenAge');
-  const credit = val('availableCredit');
+  const creditBand = val('availableCredit');
   const payment = val('paymentBand');
-  document.getElementById('sumAvgOpenAge').textContent = age;
-  document.getElementById('sumAvailableCredit').textContent = credit;
-  document.getElementById('sumPaymentHistory').textContent = payment;
-  const c = countTarget(age, credit, payment);
+  const scoreBand = val('scoreBand');
+  const score = scoreMap[scoreBand] || 700;
+  const c = countTarget(age, creditBand, payment);
   const a = ageTarget(age);
-  const l = limitTarget(credit);
-  document.getElementById('recommendations').innerHTML = `
+  const l = limitTarget(creditBand);
+
+  el('sumAvgOpenAge').textContent = age;
+  el('sumAvailableCredit').textContent = creditBand;
+  el('sumPaymentHistory').textContent = payment;
+
+  el('recommendations').innerHTML = `
     <div class="offer">
       <div class="offer-top">
         <div>
@@ -493,41 +537,63 @@ function renderResults(){
       <p class="muted" style="font-size:12px;line-height:1.45;">This is the number of tradelines suggested based on the current gaps.</p>
     </div>
   `;
-  document.getElementById('summaryCard').classList.remove('hidden');
-  document.getElementById('resultsCard').classList.remove('hidden');
-  document.getElementById('fitPct').textContent = '68%';
-  document.getElementById('fitBar').style.width = '68%';
+
+  el('summaryCard').classList.remove('hidden');
+  el('resultsCard').classList.remove('hidden');
+  el('fitPct').textContent = score + '%';
+  el('fitBar').style.width = Math.max(25, Math.min(92, score)) + '%';
+
+  return {
+    score,
+    recommendations: recommendationsText(a, l, payment, c, score)
+  };
 }
 
-document.getElementById('unlockBtn').addEventListener('click', () => {
-  const email = val('email').trim();
-  const consent = document.getElementById('consent').checked;
-  const status = document.getElementById('emailStatus');
+async function sendResults(payload){
+  const res = await fetch('/.netlify/functions/send-results', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok || !data.success) throw new Error(data.error || 'Failed to send email');
+  return data;
+}
 
-  if(!email || !email.includes('@')){
+el('leadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const status = el('formStatus');
+  const btn = el('unlockBtn');
+  const email = val('email').trim();
+  const firstName = val('firstName').trim() || 'there';
+
+  status.textContent = '';
+  status.style.color = '';
+
+  if (!email || !email.includes('@')) {
     status.textContent = 'Please enter a valid email address.';
     status.style.color = '#b91c1c';
     return;
   }
-  if(!consent){
-    status.textContent = 'Please check the consent box to continue.';
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'Generating...';
+
+  try {
+    const { score, recommendations } = renderResults();
+    await sendResults({ email, firstName, score, recommendations });
+    el('emailSuccess').classList.remove('hidden');
+    status.textContent = 'Results have been emailed to you.';
+    status.style.color = '#166534';
+  } catch (err) {
+    status.textContent = err.message || 'Something went wrong sending the email.';
     status.style.color = '#b91c1c';
-    return;
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = 'Unlock Results';
   }
-
-  status.textContent = 'Results unlocked. Check your email for a copy.';
-  status.style.color = '#166534';
-  renderResults();
-  document.getElementById('unlockBtn').classList.add('hidden');
-  document.getElementById('changeEmailBtn').classList.remove('hidden');
-});
-
-document.getElementById('changeEmailBtn').addEventListener('click', () => {
-  document.getElementById('unlockBtn').classList.remove('hidden');
-  document.getElementById('changeEmailBtn').classList.add('hidden');
-  document.getElementById('resultsCard').classList.add('hidden');
-  document.getElementById('summaryCard').classList.add('hidden');
-  document.getElementById('emailStatus').textContent = '';
 });
 </script>
 </body>
