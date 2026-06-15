@@ -32,84 +32,21 @@ body{
   color:var(--text);
 }
 .wrap{max-width:460px;margin:0 auto;padding:18px 14px 36px}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;color:#fff;
-}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;color:#fff;}
 .brand{font-weight:900;letter-spacing:-.04em;font-size:22px}
-.pill{
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.12);
-}
-.hero{
-  color:#fff;
-  padding:4px 2px 10px;
-}
-.hero h1{
-  font-size:30px;
-  line-height:1.03;
-  margin:0;
-  letter-spacing:-.04em;
-}
-.hero p{
-  margin-top:8px;
-  color:rgba(255,255,255,.78);
-  line-height:1.5;
-  font-size:14px;
-}
-.kpis{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
-.kpi{
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:18px;
-  padding:12px;
-  backdrop-filter:blur(12px);
-}
+.pill{background:rgba(255,255,255,.12);color:#fff;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);}
+.hero{color:#fff;padding:4px 2px 10px;}
+.hero h1{font-size:30px;line-height:1.03;margin:0;letter-spacing:-.04em;}
+.hero p{margin-top:8px;color:rgba(255,255,255,.78);line-height:1.5;font-size:14px;}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.kpi{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:12px;backdrop-filter:blur(12px);}
 .kpi .num{font-size:18px;font-weight:900;color:#fff}
 .kpi .lbl{font-size:11px;color:rgba(255,255,255,.72);margin-top:3px;font-weight:700}
-.progress-wrap{
-  margin:12px 0 0;
-}
-.progress-head{
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  color:rgba(255,255,255,.78);
-  margin-bottom:7px;
-  font-weight:700;
-}
-.progress{
-  height:10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.08);
-}
-.progress > div{
-  width:68%;
-  height:100%;
-  border-radius:999px;
-  background:linear-gradient(90deg,#22c55e,#3b82f6,#8b5cf6);
-}
-.card{
-  background:var(--card);
-  border:1px solid rgba(255,255,255,.35);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-  margin:14px 0;
-}
+.progress-wrap{margin:12px 0 0;}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.78);margin-bottom:7px;font-weight:700;}
+.progress{height:10px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+.progress > div{width:68%;height:100%;border-radius:999px;background:linear-gradient(90deg,#22c55e,#3b82f6,#8b5cf6);}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.35);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0;}
 h1,h2,p{margin:0}
 h2{font-size:18px;margin-bottom:10px;letter-spacing:-.02em}
 .muted{color:var(--muted)}
@@ -117,138 +54,32 @@ h2{font-size:18px;margin-bottom:10px;letter-spacing:-.02em}
 .two{grid-template-columns:1fr 1fr}
 .field{display:flex;flex-direction:column;gap:6px}
 label{font-size:12px;font-weight:800;color:#334155}
-input,select,textarea{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;
-  font:inherit;
-  background:#fff;
-  outline:none;
-}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--blue);
-  box-shadow:0 0 0 4px rgba(37,99,235,.12);
-}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;font:inherit;background:#fff;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12);}
 textarea{min-height:88px;resize:vertical}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  padding:14px 16px;
-  border:none;
-  border-radius:16px;
-  background:linear-gradient(135deg,var(--blue),var(--blue2));
-  color:#fff;
-  font-weight:900;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:14px;
-  box-shadow:0 14px 24px rgba(37,99,235,.24);
-}
-.btn.secondary{
-  background:#fff;
-  color:var(--blue);
-  border:1px solid var(--line);
-  box-shadow:none;
-}
-.btn:disabled{
-  opacity:.75;
-  cursor:not-allowed;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:14px 16px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-weight:900;font-size:15px;cursor:pointer;margin-top:14px;box-shadow:0 14px 24px rgba(37,99,235,.24);text-decoration:none;}
+.btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--line);box-shadow:none;}
+.btn:disabled{opacity:.75;cursor:not-allowed;}
 .divider{height:1px;background:var(--line);margin:14px 0}
-.stat{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:11px 0;
-  border-bottom:1px solid var(--line);
-  font-size:14px;
-}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;}
 .stat:last-child{border-bottom:none}
-.badge{
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  background:#f1f5f9;
-}
+.badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#f1f5f9;}
 .b-excellent{background:#dcfce7;color:#166534}
 .b-good{background:#dbeafe;color:#1d4ed8}
 .b-fair{background:#fef3c7;color:#92400e}
 .b-needs{background:#fee2e2;color:#991b1b}
-.offer{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:14px;
-  margin-top:10px;
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-}
-.offer-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
-  margin-bottom:8px;
-}
+.offer{border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px;background:linear-gradient(180deg,#ffffff,#f8fafc);}
+.offer-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px;}
 .offer-title{font-weight:900;font-size:15px}
 .offer-meta{font-size:12px;color:var(--muted);margin-top:4px}
-.disclosure{
-  border-left:4px solid var(--amber);
-  background:#fff7ed;
-  padding:12px;
-  border-radius:14px;
-  font-size:12px;
-  color:#9a3412;
-  line-height:1.45;
-}
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
+.disclosure{border-left:4px solid var(--amber);background:#fff7ed;padding:12px;border-radius:14px;font-size:12px;color:#9a3412;line-height:1.45;}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .mini{font-size:11px;color:var(--muted);font-weight:800}
-.footer-note{
-  margin-top:12px;
-  font-size:11px;
-  color:rgba(255,255,255,.72);
-  text-align:center;
-}
-.locked{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:stretch;
-}
-.lock-banner{
-  background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(79,70,229,.08));
-  border:1px solid #dbeafe;
-  color:#1e3a8a;
-  padding:12px;
-  border-radius:16px;
-  font-size:13px;
-  line-height:1.45;
-}
+.footer-note{margin-top:12px;font-size:11px;color:rgba(255,255,255,.72);text-align:center;}
+.lock-banner{background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(79,70,229,.08));border:1px solid #dbeafe;color:#1e3a8a;padding:12px;border-radius:16px;font-size:13px;line-height:1.45;}
 .hidden{display:none !important;}
-.privacy-link{
-  font-size:12px;
-  color:#1d4ed8;
-  text-decoration:underline;
-  font-weight:800;
-}
-.status{
-  min-height:18px;
-  font-size:12px;
-  font-weight:800;
-  text-align:center;
-  padding-top:4px;
-}
-.loading{
-  opacity:.75;
-  pointer-events:none;
-}
+.status{min-height:18px;font-size:12px;font-weight:800;text-align:center;padding-top:4px;}
+.loading{opacity:.75;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -261,12 +92,10 @@ textarea{min-height:88px;resize:vertical}
   <div class="hero">
     <h1>Find the right tradeline targets fast</h1>
     <p>Enter a credit snapshot, unlock exact target ranges, and get a cleaner path to reviewing offers.</p>
-
     <div class="kpis">
       <div class="kpi"><div class="num">3</div><div class="lbl">Target outputs</div></div>
       <div class="kpi"><div class="num">1 tap</div><div class="lbl">To generate</div></div>
     </div>
-
     <div class="progress-wrap">
       <div class="progress-head"><span>Profile fit</span><span id="fitPct">68%</span></div>
       <div class="progress"><div id="fitBar"></div></div>
@@ -285,133 +114,49 @@ textarea{min-height:88px;resize:vertical}
           <input id="firstName" type="text" placeholder="Enter first name" required />
         </div>
         <div class="field">
-          <label>Email address</label>
-          <input id="email" type="email" placeholder="you@example.com" required />
+          <label>Last name</label>
+          <input id="lastName" type="text" placeholder="Enter last name" required />
         </div>
       </div>
 
-      <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Goal type</label>
-          <select id="goalType">
-            <option>Personal loan</option>
-            <option>Business funding</option>
-            <option>Credit card</option>
-            <option>Debt consolidation</option>
-            <option>Build credit</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Urgency</label>
-          <select id="urgency">
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
-          </select>
-        </div>
+      <div class="field" style="margin-top:10px;">
+        <label>Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" required />
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Score band</label>
-          <select id="scoreBand">
-            <option>Needs work (300–579)</option>
-            <option>Fair (580–669)</option>
-            <option selected>Good (670–739)</option>
-            <option>Excellent (740–850)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Hard inquiries - Equifax</label>
-          <input id="equifaxInq" type="number" min="0" step="1" placeholder="Enter number" />
-        </div>
+        <div class="field"><label>Goal type</label><select id="goalType"><option>Personal loan</option><option>Business funding</option><option>Credit card</option><option>Debt consolidation</option><option>Build credit</option></select></div>
+        <div class="field"><label>Urgency</label><select id="urgency"><option>High</option><option>Medium</option><option>Low</option></select></div>
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Hard inquiries - Experian</label>
-          <input id="experianInq" type="number" min="0" step="1" placeholder="Enter number" />
-        </div>
-        <div class="field">
-          <label>Hard inquiries - TransUnion</label>
-          <input id="transunionInq" type="number" min="0" step="1" placeholder="Enter number" />
-        </div>
+        <div class="field"><label>Score band</label><select id="scoreBand"><option>Needs work (300–579)</option><option>Fair (580–669)</option><option selected>Good (670–739)</option><option>Excellent (740–850)</option></select></div>
+        <div class="field"><label>Hard inquiries - Equifax</label><input id="equifaxInq" type="number" min="0" step="1" placeholder="Enter number" /></div>
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Total accounts</label>
-          <input id="totalAccounts" type="number" min="0" step="1" placeholder="Enter number" />
-        </div>
-        <div class="field">
-          <label>Open accounts</label>
-          <input id="openAccounts" type="number" min="0" step="1" placeholder="Enter number" />
-        </div>
+        <div class="field"><label>Hard inquiries - Experian</label><input id="experianInq" type="number" min="0" step="1" placeholder="Enter number" /></div>
+        <div class="field"><label>Hard inquiries - TransUnion</label><input id="transunionInq" type="number" min="0" step="1" placeholder="Enter number" /></div>
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Credit card utilization</label>
-          <select id="utilization">
-            <option>Excellent (0–9%)</option>
-            <option>Good (10–29%)</option>
-            <option>Fair (30–49%)</option>
-            <option>Needs work (50–100%)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Annual personal income</label>
-          <select id="personalIncome">
-            <option>0–50k</option>
-            <option>50k–100k</option>
-            <option>100k–200k</option>
-            <option>200k–300k</option>
-            <option>Above 300k</option>
-          </select>
-        </div>
+        <div class="field"><label>Total accounts</label><input id="totalAccounts" type="number" min="0" step="1" placeholder="Enter number" /></div>
+        <div class="field"><label>Open accounts</label><input id="openAccounts" type="number" min="0" step="1" placeholder="Enter number" /></div>
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Annual business revenue</label>
-          <select id="businessRevenue">
-            <option>0–50k</option>
-            <option>50k–100k</option>
-            <option>100k–200k</option>
-            <option>200k–300k</option>
-            <option>Above 300k</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Average age of open accounts</label>
-          <select id="avgOpenAge">
-            <option>Needs work (0–5 years)</option>
-            <option>Fair (5–6 years)</option>
-            <option>Good (7–8 years)</option>
-            <option>Excellent (9+ years)</option>
-          </select>
-        </div>
+        <div class="field"><label>Credit card utilization</label><select id="utilization"><option>Excellent (0–9%)</option><option>Good (10–29%)</option><option>Fair (30–49%)</option><option>Needs work (50–100%)</option></select></div>
+        <div class="field"><label>Annual personal income</label><select id="personalIncome"><option>0–50k</option><option>50k–100k</option><option>100k–200k</option><option>200k–300k</option><option>Above 300k</option></select></div>
       </div>
 
       <div class="grid two" style="margin-top:10px;">
-        <div class="field">
-          <label>Total available credit</label>
-          <select id="availableCredit">
-            <option>Needs work ($0–$9,999)</option>
-            <option>Fair ($10,000–$24,999)</option>
-            <option>Good ($25,000–$49,999)</option>
-            <option>Excellent ($50,000+)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Payment history band</label>
-          <select id="paymentBand">
-            <option>Excellent (100%)</option>
-            <option>Good (99%)</option>
-            <option selected>Fair (98%)</option>
-            <option>Bad (0–97%)</option>
-          </select>
-        </div>
+        <div class="field"><label>Annual business revenue</label><select id="businessRevenue"><option>0–50k</option><option>50k–100k</option><option>100k–200k</option><option>200k–300k</option><option>Above 300k</option></select></div>
+        <div class="field"><label>Average age of open accounts</label><select id="avgOpenAge"><option>Needs work (0–5 years)</option><option>Fair (5–6 years)</option><option>Good (7–8 years)</option><option>Excellent (9+ years)</option></select></div>
+      </div>
+
+      <div class="grid two" style="margin-top:10px;">
+        <div class="field"><label>Total available credit</label><select id="availableCredit"><option>Needs work ($0–$9,999)</option><option>Fair ($10,000–$24,999)</option><option>Good ($25,000–$49,999)</option><option>Excellent ($50,000+)</option></select></div>
+        <div class="field"><label>Payment history band</label><select id="paymentBand"><option>Excellent (100%)</option><option>Good (99%)</option><option selected>Fair (98%)</option><option>Bad (0–97%)</option></select></div>
       </div>
 
       <div class="field" style="margin-top:10px;">
@@ -425,29 +170,21 @@ textarea{min-height:88px;resize:vertical}
   </div>
 
   <div class="card hidden" id="summaryCard">
-    <div class="section-title">
-      <h2>Profile summary</h2>
-      <div class="mini">Live values</div>
-    </div>
+    <div class="section-title"><h2>Profile summary</h2><div class="mini">Live values</div></div>
     <div class="stat"><span>Average age of open accounts</span><span class="badge b-good" id="sumAvgOpenAge">Good</span></div>
     <div class="stat"><span>Total available credit</span><span class="badge b-good" id="sumAvailableCredit">Good</span></div>
     <div class="stat"><span>Payment history</span><span class="badge b-fair" id="sumPaymentHistory">Fair</span></div>
   </div>
 
   <div class="card hidden" id="resultsCard">
-    <div class="section-title">
-      <h2>Suggested tradelines</h2>
-      <div class="mini">Exact targets</div>
-    </div>
+    <div class="section-title"><h2>Suggested tradelines</h2><div class="mini">Exact targets</div></div>
     <div id="recommendations"></div>
+    <a class="btn" id="affiliateBtn" href="https://www.tkqlhce.com/click-101773653-13503362" target="_blank" rel="noopener" style="margin-top:14px;">View Tradeline Options</a>
     <div id="emailSuccess" class="lock-banner hidden" style="margin-top:12px;">Results have been emailed to you.</div>
   </div>
 
   <div class="card">
-    <div class="section-title">
-      <h2>Consent & disclosure</h2>
-      <div class="mini">Required</div>
-    </div>
+    <div class="section-title"><h2>Consent & disclosure</h2><div class="mini">Required</div></div>
     <div class="disclosure">Recommendations are educational and not approvals or guarantees.</div>
   </div>
 
@@ -506,36 +243,9 @@ function renderResults(){
   el('sumPaymentHistory').textContent = payment;
 
   el('recommendations').innerHTML = `
-    <div class="offer">
-      <div class="offer-top">
-        <div>
-          <div class="offer-title">Exact age target</div>
-          <div class="offer-meta">${a}</div>
-        </div>
-        <div class="badge b-excellent">Target</div>
-      </div>
-      <p class="muted" style="font-size:12px;line-height:1.45;">Use this age range when selecting a tradeline to improve average age.</p>
-    </div>
-    <div class="offer">
-      <div class="offer-top">
-        <div>
-          <div class="offer-title">Exact limit target</div>
-          <div class="offer-meta">${l}</div>
-        </div>
-        <div class="badge b-good">Target</div>
-      </div>
-      <p class="muted" style="font-size:12px;line-height:1.45;">Use this credit limit range when selecting a tradeline to improve available credit and utilization.</p>
-    </div>
-    <div class="offer">
-      <div class="offer-top">
-        <div>
-          <div class="offer-title">Exact count target</div>
-          <div class="offer-meta">${c} tradeline${c > 1 ? 's' : ''}</div>
-        </div>
-        <div class="badge b-fair">Target</div>
-      </div>
-      <p class="muted" style="font-size:12px;line-height:1.45;">This is the number of tradelines suggested based on the current gaps.</p>
-    </div>
+    <div class="offer"><div class="offer-top"><div><div class="offer-title">Exact age target</div><div class="offer-meta">${a}</div></div><div class="badge b-excellent">Target</div></div><p class="muted" style="font-size:12px;line-height:1.45;">Use this age range when selecting a tradeline to improve average age.</p></div>
+    <div class="offer"><div class="offer-top"><div><div class="offer-title">Exact limit target</div><div class="offer-meta">${l}</div></div><div class="badge b-good">Target</div></div><p class="muted" style="font-size:12px;line-height:1.45;">Use this credit limit range when selecting a tradeline to improve available credit and utilization.</p></div>
+    <div class="offer"><div class="offer-top"><div><div class="offer-title">Exact count target</div><div class="offer-meta">${c} tradeline${c > 1 ? 's' : ''}</div></div><div class="badge b-fair">Target</div></div><p class="muted" style="font-size:12px;line-height:1.45;">This is the number of tradelines suggested based on the current gaps.</p></div>
   `;
 
   el('summaryCard').classList.remove('hidden');
@@ -543,10 +253,7 @@ function renderResults(){
   el('fitPct').textContent = score + '%';
   el('fitBar').style.width = Math.max(25, Math.min(92, score)) + '%';
 
-  return {
-    score,
-    recommendations: recommendationsText(a, l, payment, c, score)
-  };
+  return { score, recommendations: recommendationsText(a, l, payment, c, score) };
 }
 
 async function sendResults(payload){
@@ -566,6 +273,7 @@ el('leadForm').addEventListener('submit', async (e) => {
   const btn = el('unlockBtn');
   const email = val('email').trim();
   const firstName = val('firstName').trim() || 'there';
+  const lastName = val('lastName').trim();
 
   status.textContent = '';
   status.style.color = '';
@@ -582,7 +290,7 @@ el('leadForm').addEventListener('submit', async (e) => {
 
   try {
     const { score, recommendations } = renderResults();
-    await sendResults({ email, firstName, score, recommendations });
+    await sendResults({ email, firstName, lastName, score, recommendations });
     el('emailSuccess').classList.remove('hidden');
     status.textContent = 'Results have been emailed to you.';
     status.style.color = '#166534';
