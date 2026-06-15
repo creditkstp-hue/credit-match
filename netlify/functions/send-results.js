@@ -41,6 +41,8 @@ exports.handler = async (event) => {
     const payload = JSON.parse(event.body || "{}");
     const email = String(payload.email || "").trim().toLowerCase();
     const firstName = String(payload.firstName || "there").trim();
+    const lastName = String(payload.lastName || "").trim();
+    const fullName = [firstName, lastName].filter(Boolean).join(" ");
     const score = payload.score || "Not provided";
     const recommendations = String(payload.recommendations || "").trim();
 
@@ -66,6 +68,8 @@ exports.handler = async (event) => {
         updateEnabled: true,
         attributes: {
           FIRSTNAME: firstName,
+          LASTNAME: lastName,
+          FULLNAME: fullName,
           SCORE: String(score),
           SOURCE: "Credit Match Web App"
         }
@@ -89,7 +93,7 @@ exports.handler = async (event) => {
           name: "Credit Match",
           email: process.env.BREVO_SENDER_EMAIL || "creditkstp@gmail.com"
         },
-        to: [{ email, name: firstName }],
+        to: [{ email, name: fullName || firstName }],
         subject: "Your Credit Match Tradeline Targets",
         htmlContent: `
           <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;max-width:620px;margin:auto;">
