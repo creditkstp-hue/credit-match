@@ -19,7 +19,7 @@
   </div>
 
   <div class="card">
-    <h2>Build a stronger profile</h2><p class="muted">Results unlock after email submission.</p><div class="divider"></div>
+    <h2>Build a stronger profile</h2><p class="muted">Enter your details to receive tailored educational suggestions by email.</p><div class="divider"></div>
     <form id="leadForm">
       <div class="grid two"><div class="field"><label>First name</label><input id="firstName" type="text" placeholder="Enter first name" required /></div><div class="field"><label>Last name</label><input id="lastName" type="text" placeholder="Enter last name" required /></div></div>
       <div class="field" style="margin-top:10px"><label>Email address</label><input id="email" type="email" placeholder="you@example.com" required /></div>
@@ -50,32 +50,30 @@ function countTarget(age,credit,payment){let n=1;if(age.includes('Needs work')||
 function getNegativeItems(){return Array.from(document.querySelectorAll('input[name="negativeItems"]:checked')).map(x=>x.value).filter(x=>x!=='None')}
 function offerCard(o,i){return `<div class="offer"><div class="offer-top"><div><div class="offer-title"><span class="rank">${i+1===1?'🥇':i+1===2?'🥈':'🥉'}</span>${o.title}</div><div class="offer-meta">${o.reason}</div></div><div class="badge ${o.badge}">Suggested step</div></div><a class="btn" href="${o.link}" target="_blank" rel="noopener">${o.button}</a></div>`}
 function recommendationsText(offers,a,l,c,score,payment){return `Self-reported credit score band: ${val("scoreBand")}\nPayment history: ${payment}\n\nSuggested next steps (not eligibility or approval probabilities):\n${offers.length?offers.map((o,i)=>`${i+1}. ${o.title} - ${o.reason}\nLink: ${o.link}`).join('\n'):'No clear partner recommendation for this profile. Review free credit reports before choosing a paid service.'}`}
-function renderResults(){
-  const age=val('avgOpenAge'),creditBand=val('availableCredit'),payment=val('paymentBand'),scoreBand=val('scoreBand'),util=val('utilization'),monitoring=val('creditMonitoring'),freq=val('creditCheckFrequency');
-  const totalAccounts=parseInt(val('totalAccounts')||'0',10),openAccounts=parseInt(val('openAccounts')||'0',10),negatives=getNegativeItems();
-  const score=scoreBand,c=countTarget(age,creditBand,payment),a=ageTarget(age),l=limitTarget(creditBand);
-  el('sumAvgOpenAge').textContent=age;el('sumAvailableCredit').textContent=creditBand;el('sumPaymentHistory').textContent=payment;
-  const offers=[];
-  // Needs-first suggestions: never show a product just because it has an affiliate link.
-  if(monitoring==='No'||freq==='Only before applying'||freq==='Never'){
-    offers.push({title:'Credit Monitoring',priority:90,badge:'b-good',link:LINKS.monitoring,button:'Compare Credit Monitoring',reason:'You may benefit from reviewing all three credit reports and tracking changes. Compare pricing, trial terms, cancellation rules, and coverage before subscribing.'});
-  }
-  if(negatives.length>0){
-    offers.push({title:'Negative Item Review',priority:negatives.length>=3?85:75,badge:'b-fair',link:LINKS.dispute,button:'Explore Dispute Tools',reason:`You reported ${negatives.join(', ')}. Review your reports for errors first. You can dispute inaccurate or incomplete information yourself for free; a paid tool is optional and cannot guarantee removal.`});
-  }
-  if((age.includes('Needs work')||age.includes('Fair')||creditBand.includes('Needs work')||util.includes('Fair')||util.includes('Needs work')) && (val('goalType')==='Build credit')){
-    offers.push({title:'Compare Tradeline Options',priority:55,badge:'b-good',link:LINKS.tradeline,button:'Review Tradeline Details',reason:'You indicated a credit-building goal. Consider safer alternatives such as paying existing balances down and keeping accounts current before purchasing tradeline services. Authorized-user tradelines may not help with all scoring models.'});
-  }
-  if(offers.length===0){
-    el('recommendations').textContent='Your answers do not indicate a clear match among our current partner offers. Consider reviewing your free credit reports and comparing terms from reputable providers before applying for new credit.';
-  }
-  offers.sort((x,y)=>y.priority-x.priority);
-  if(offers.length)el('recommendations').innerHTML=offers.map(offerCard).join('');el('summaryCard').classList.remove('hidden');el('resultsCard').classList.remove('hidden');
-  return {score,recommendations:recommendationsText(offers,a,l,c,score,payment)};
+const escapeText=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+async function renderResults(){
+ const score=val('scoreBand'),payment=val('paymentBand');
+ const negatives=getNegativeItems();
+ el('sumAvgOpenAge').textContent=val('avgOpenAge');
+ el('sumAvailableCredit').textContent=val('availableCredit');
+ el('sumPaymentHistory').textContent=payment;
+ const profile={goalType:val('goalType'),creditMonitoring:val('creditMonitoring'),creditCheckFrequency:val('creditCheckFrequency'),negativeItems:negatives};
+ const res=await fetch('/.netlify/functions/affiliate?action=match',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(profile)});
+ const data=await res.json();
+ if(!res.ok)throw Error(data.error||'Recommendations unavailable');
+ const offers=data.offers||[];
+ if(!offers.length){
+  el('recommendations').textContent='We do not have a relevant partner offer for this profile right now. Review your free credit reports, compare costs, and avoid paying for services you do not need.';
+ }else{
+  el('recommendations').innerHTML=offers.map(o=>`<div class="offer"><div class="offer-top"><div><div class="offer-title">${escapeText(o.name)}</div><div class="offer-meta">${escapeText(o.description)}</div><p class="mini" style="margin-top:8px">${escapeText(o.disclosure)}</p></div></div><a class="btn" href="${escapeText(o.clickUrl)}" target="_blank" rel="noopener noreferrer">Review option</a></div>`).join('');
+ }
+ el('summaryCard').classList.remove('hidden');el('resultsCard').classList.remove('hidden');
+ const rec=offers.length?offers.map((o,i)=>`${i+1}. ${o.name}: ${o.description} ${o.disclosure}\nExplore: ${new URL(o.clickUrl,location.origin).href}`).join('\n\n'):'No current partner recommendations match the stated needs.';
+ return {score,recommendations:`Self-reported credit band: ${score}\nPayment history: ${payment}\n\n${rec}\n\nAffiliate disclosure: We may earn a commission if you purchase through an affiliate link.`};
 }
 async function sendResults(payload){const res=await fetch('/.netlify/functions/send-results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.error||'Failed to send email');return data}
 document.querySelectorAll('input[name="negativeItems"]').forEach(box=>box.addEventListener('change',e=>{if(e.target.value==='None'&&e.target.checked){document.querySelectorAll('input[name="negativeItems"]').forEach(b=>{if(b.value!=='None')b.checked=false})}else if(e.target.checked){const none=document.querySelector('input[name="negativeItems"][value="None"]');if(none)none.checked=false}}));
-el('leadForm').addEventListener('submit',async e=>{e.preventDefault();const status=el('formStatus'),btn=el('unlockBtn'),email=val('email').trim(),firstName=val('firstName').trim()||'there',lastName=val('lastName').trim();status.textContent='';status.style.color='';if(!email||!email.includes('@')){status.textContent='Please enter a valid email address.';status.style.color='#b91c1c';return}btn.disabled=true;btn.classList.add('loading');btn.textContent='Generating...';try{const {score,recommendations}=renderResults();await sendResults({email,firstName,lastName,score,recommendations,emailConsent:el('emailConsent').checked,marketingConsent:el('marketingConsent').checked});el('emailSuccess').classList.remove('hidden');status.textContent='Results have been emailed to you.';status.style.color='#166534'}catch(err){status.textContent=err.message||'Something went wrong sending the email.';status.style.color='#b91c1c'}finally{btn.disabled=false;btn.classList.remove('loading');btn.textContent='Unlock Results'}});
+el('leadForm').addEventListener('submit',async e=>{e.preventDefault();const status=el('formStatus'),btn=el('unlockBtn'),email=val('email').trim(),firstName=val('firstName').trim()||'there',lastName=val('lastName').trim();status.textContent='';status.style.color='';if(!email||!email.includes('@')){status.textContent='Please enter a valid email address.';status.style.color='#b91c1c';return}btn.disabled=true;btn.classList.add('loading');btn.textContent='Generating...';try{const {score,recommendations}=await renderResults();await sendResults({email,firstName,lastName,score,recommendations,emailConsent:el('emailConsent').checked,marketingConsent:el('marketingConsent').checked});el('emailSuccess').classList.remove('hidden');status.textContent='Results have been emailed to you.';status.style.color='#166534'}catch(err){status.textContent=err.message||'Something went wrong sending the email.';status.style.color='#b91c1c'}finally{btn.disabled=false;btn.classList.remove('loading');btn.textContent='Unlock Results'}});
 </script>
 </body>
 </html>
