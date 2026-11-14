@@ -1,6 +1,5 @@
 const BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts";
 const BREVO_EMAIL_URL = "https://api.brevo.com/v3/smtp/email";
-const AFFILIATE_LINK = "https://www.tkqlhce.com/click-101773653-13503362";
 
 function json(statusCode, body) {
   return {
@@ -112,11 +111,6 @@ exports.handler = async (event) => {
               <pre style="white-space:pre-wrap;font-family:Arial,sans-serif;margin:0;">${safeRecommendations}</pre>
             </div>
             <p><strong>Optional next step:</strong> Compare the terms, risks, and costs of any service before deciding.</p>
-            <p>
-              <a href="${AFFILIATE_LINK}" style="background:#2563eb;color:white;text-decoration:none;padding:13px 18px;border-radius:12px;font-weight:bold;display:inline-block;">
-                View Tradeline Options
-              </a>
-            </p>
             <p style="font-size:12px;color:#64748b;">Educational information only, not an approval, credit-score prediction, credit repair guarantee, or financial advice. Affiliate disclosure: Credit Match may earn a commission if you use a referral link. Authorized-user tradelines do not guarantee score improvements.</p>
           </div>
         `
@@ -136,7 +130,6 @@ exports.handler = async (event) => {
       success: true,
       contactSaved: true,
       emailSent: true,
-      affiliateLink: AFFILIATE_LINK,
       marketingConsentReceived: payload.marketingConsent === true,
       marketingAutomationEnabled: false
     });
