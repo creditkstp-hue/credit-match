@@ -49,19 +49,28 @@ function limitTarget(v){if(v.includes('Needs work'))return'$15,000–$25,000+';i
 function countTarget(age,credit,payment){let n=1;if(age.includes('Needs work')||age.includes('Fair'))n++;if(credit.includes('Needs work')||credit.includes('Fair'))n++;if(payment.includes('Bad')||payment.includes('Fair'))n++;return Math.min(3,n)}
 function getNegativeItems(){return Array.from(document.querySelectorAll('input[name="negativeItems"]:checked')).map(x=>x.value).filter(x=>x!=='None')}
 function offerCard(o,i){return `<div class="offer"><div class="offer-top"><div><div class="offer-title"><span class="rank">${i+1===1?'🥇':i+1===2?'🥈':'🥉'}</span>${o.title}</div><div class="offer-meta">${o.reason}</div></div><div class="badge ${o.badge}">Suggested step</div></div><a class="btn" href="${o.link}" target="_blank" rel="noopener">${o.button}</a></div>`}
-function recommendationsText(offers,a,l,c,score,payment){return `Self-reported credit score band: ${val("scoreBand")}\nIllustrative age range: ${a}\nIllustrative credit-limit range: ${l}\nIllustrative tradeline count: ${c}\nPayment history: ${payment}\n\nSuggested next steps (not eligibility or approval probabilities):\n${offers.map((o,i)=>`${i+1}. ${o.title} - ${o.reason}`).join('\n')}`}
+function recommendationsText(offers,a,l,c,score,payment){return `Self-reported credit score band: ${val("scoreBand")}\nPayment history: ${payment}\n\nSuggested next steps (not eligibility or approval probabilities):\n${offers.length?offers.map((o,i)=>`${i+1}. ${o.title} - ${o.reason}\nLink: ${o.link}`).join('\n'):'No clear partner recommendation for this profile. Review free credit reports before choosing a paid service.'}`}
 function renderResults(){
   const age=val('avgOpenAge'),creditBand=val('availableCredit'),payment=val('paymentBand'),scoreBand=val('scoreBand'),util=val('utilization'),monitoring=val('creditMonitoring'),freq=val('creditCheckFrequency');
   const totalAccounts=parseInt(val('totalAccounts')||'0',10),openAccounts=parseInt(val('openAccounts')||'0',10),negatives=getNegativeItems();
   const score=scoreBand,c=countTarget(age,creditBand,payment),a=ageTarget(age),l=limitTarget(creditBand);
   el('sumAvgOpenAge').textContent=age;el('sumAvailableCredit').textContent=creditBand;el('sumPaymentHistory').textContent=payment;
   const offers=[];
-  let tradelineMatch=70;if(age.includes('Needs work')||age.includes('Fair'))tradelineMatch+=10;if(creditBand.includes('Needs work')||creditBand.includes('Fair'))tradelineMatch+=10;if(util.includes('Fair')||util.includes('Needs work'))tradelineMatch+=8;if(openAccounts>0&&openAccounts<4)tradelineMatch+=7;if(totalAccounts>0&&totalAccounts<6)tradelineMatch+=5;tradelineMatch=Math.min(98,tradelineMatch);
-  offers.push({title:'Tradeline Options',match:tradelineMatch,badge:'b-excellent',link:LINKS.tradeline,button:'View Tradeline Options',reason:`Illustrative comparison criteria: ${c} tradeline${c>1?'s':''}, account age ${a}, and limit ${l}. These are not verified needs or guaranteed score improvements. Compare costs, risks, and reporting details before buying.`});
-  if(monitoring==='No'||freq==='Only before applying'||freq==='Never')offers.push({title:'Credit Monitoring',match:freq==='Never'?94:88,badge:'b-good',link:LINKS.monitoring,button:'Start Credit Monitoring',reason:'You should monitor all 3 bureaus so you can track score changes, new inquiries, account updates, and fraud while improving your credit profile.'});
-  if(negatives.length>0)offers.push({title:'DisputeBee Negative Item Review',match:negatives.length>=3?92:84,badge:'b-fair',link:LINKS.dispute,button:'Start Disputing',reason:`You selected ${negatives.join(', ')}. These items may need review or dispute if inaccurate, incomplete, outdated, or unverifiable.`});
-  offers.sort((x,y)=>y.match-x.match);
-  el('recommendations').innerHTML=offers.map(offerCard).join('');el('summaryCard').classList.remove('hidden');el('resultsCard').classList.remove('hidden');
+  // Needs-first suggestions: never show a product just because it has an affiliate link.
+  if(monitoring==='No'||freq==='Only before applying'||freq==='Never'){
+    offers.push({title:'Credit Monitoring',priority:90,badge:'b-good',link:LINKS.monitoring,button:'Compare Credit Monitoring',reason:'You may benefit from reviewing all three credit reports and tracking changes. Compare pricing, trial terms, cancellation rules, and coverage before subscribing.'});
+  }
+  if(negatives.length>0){
+    offers.push({title:'Negative Item Review',priority:negatives.length>=3?85:75,badge:'b-fair',link:LINKS.dispute,button:'Explore Dispute Tools',reason:`You reported ${negatives.join(', ')}. Review your reports for errors first. You can dispute inaccurate or incomplete information yourself for free; a paid tool is optional and cannot guarantee removal.`});
+  }
+  if((age.includes('Needs work')||age.includes('Fair')||creditBand.includes('Needs work')||util.includes('Fair')||util.includes('Needs work')) && (val('goalType')==='Build credit')){
+    offers.push({title:'Compare Tradeline Options',priority:55,badge:'b-good',link:LINKS.tradeline,button:'Review Tradeline Details',reason:'You indicated a credit-building goal. Consider safer alternatives such as paying existing balances down and keeping accounts current before purchasing tradeline services. Authorized-user tradelines may not help with all scoring models.'});
+  }
+  if(offers.length===0){
+    el('recommendations').textContent='Your answers do not indicate a clear match among our current partner offers. Consider reviewing your free credit reports and comparing terms from reputable providers before applying for new credit.';
+  }
+  offers.sort((x,y)=>y.priority-x.priority);
+  if(offers.length)el('recommendations').innerHTML=offers.map(offerCard).join('');el('summaryCard').classList.remove('hidden');el('resultsCard').classList.remove('hidden');
   return {score,recommendations:recommendationsText(offers,a,l,c,score,payment)};
 }
 async function sendResults(payload){const res=await fetch('/.netlify/functions/send-results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.error||'Failed to send email');return data}
