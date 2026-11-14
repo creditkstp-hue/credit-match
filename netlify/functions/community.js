@@ -4,7 +4,7 @@ const namespace=process.env.CONTEXT==="production"?"credit-match-affiliates":"cr
 const store=()=>getStore(namespace);
 const respond=(statusCode,data)=>({statusCode,headers:{"Content-Type":"application/json","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"},body:JSON.stringify(data)});
 function isAdmin(e){const configured=process.env.CREDIT_MATCH_ADMIN_KEY||"",provided=e.headers?.["x-admin-key"]||e.headers?.["X-Admin-Key"]||"";const a=Buffer.from(configured),b=Buffer.from(provided);return !!configured&&a.length===b.length&&crypto.timingSafeEqual(a,b)}
-function safeUrl(value){const u=new URL(value);if(u.protocol!=="https:"||u.hostname!=="www.skool.com"&&u.hostname!=="skool.com"||u.username||u.password||!/^\/[a-z0-9-]+\/?$/i.test(u.pathname))throw Error("Enter an official Skool community URL, such as the one copied from Settings > Invite.");u.search="";u.hash="";return u.href}
+function safeUrl(value){const u=new URL(value);if(u.protocol!=="https:"||u.hostname!=="www.skool.com"&&u.hostname!=="skool.com"||u.username||u.password||!/^\/[a-z0-9-]+(?:\/about)?\/?$/i.test(u.pathname))throw Error("Enter an official Skool community URL, such as the one copied from Settings > Invite.");u.search="";u.hash="";return u.href}
 exports.handler=async(event)=>{
  try{
   if(event.httpMethod==="GET"){
