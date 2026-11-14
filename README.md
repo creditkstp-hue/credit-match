@@ -38,3 +38,14 @@ Branch: `feature/credit-match-trust-and-consent`. No live site deploy has been p
 - The landing page now links directly to the guides. Guide CTAs return visitors to the appropriate assessment track (`/?track=business` or `/?track=personal`).
 - Consumer references: CFPB rebuilding credit and AnnualCreditReport.com. Business references: SBA business credit setup, IRS EIN application. Visitors should not need paid referrals to learn the fundamentals.
 - The guide is static educational content; it is not a conversational chatbot, AI adviser, or individualized credit report review. Review content periodically for regulatory and vendor changes.
+
+
+## All The Sauce Skool community
+- Existing community, not a newly created group. Public page: `/community.html`; linked from the assessment and learning center.
+- Prior project structure: a free community layer plus a premium learning tier **THE KITCHEN**, with previously discussed pricing of **$39/month or $339/year**. The live Skool offering/pricing remains unverified; the website intentionally does **not** display a live price.
+- The exact existing Skool community URL has not been confirmed. No link is guessed. Until configured, the join button is disabled with an explanation.
+- An owner can connect the verified URL under the `All The Sauce connection` section in `/admin.html`, protected by `CREDIT_MATCH_ADMIN_KEY`. The backend accepts only HTTPS URLs for an actual skool.com community or /about page. The value is stored separately in Netlify Blobs.
+- To get a paid community's public link: Skool community > Settings > Invite > COPY, then paste the real link in the Credit Match dashboard. **Do not use Skool email invites as public paid-community links**: direct email invites can grant free membership.
+- Skool controls membership, fees, access and cancellation. Credit Match does not process or verify community purchases, membership status or Skool revenue.
+- Skool Growth may categorize signups driven by a direct website link as External website; confirm actual attribution in the Skool account.
+- This is a link integration, not automatic SSO, enrollment, or synchronization. Those would require an explicitly supported and authorized integration.
