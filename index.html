@@ -81,12 +81,12 @@ async function renderResults(){
  if(!res.ok)throw Error(data.error||'Recommendations unavailable');
  const offers=data.offers||[];
  if(!offers.length){
-  el('recommendations').textContent='We do not have a relevant partner offer for this profile right now. Review your free credit reports, compare costs, and avoid paying for services you do not need.';
+  el('recommendations').textContent=segment==='business'?'Your business credit foundation checklist: confirm business registration and EIN where applicable; open a separate business checking account; verify your business information with relevant reporting agencies; and consider vendors that explicitly report payments to business credit bureaus. Check fees and reporting details. No vetted business affiliate offer is currently configured.':'We do not have a relevant partner offer for this profile right now. Review your free credit reports, compare costs, and avoid paying for services you do not need.';
  }else{
   el('recommendations').innerHTML=offers.map(o=>`<div class="offer"><div class="offer-top"><div><div class="offer-title">${escapeText(o.name)}</div><div class="offer-meta">${escapeText(o.description)}</div><p class="mini" style="margin-top:8px">${escapeText(o.disclosure)}</p></div></div><a class="btn" href="${escapeText(o.clickUrl)}" target="_blank" rel="noopener noreferrer">Review option</a></div>`).join('');
  }
  el('summaryCard').classList.remove('hidden');el('resultsCard').classList.remove('hidden');
- const rec=offers.length?offers.map((o,i)=>`${i+1}. ${o.name}: ${o.description} ${o.disclosure}\nExplore: ${new URL(o.clickUrl,location.origin).href}`).join('\n\n'):'No current partner recommendations match the stated needs.';
+ const rec=offers.length?offers.map((o,i)=>`${i+1}. ${o.name}: ${o.description} ${o.disclosure}\nExplore: ${new URL(o.clickUrl,location.origin).href}`).join('\n\n') : segment==='business'?'No vetted business affiliate offer configured. Check registration and EIN as applicable, separate business banking, reporting bureaus, and vendors with documented business-credit reporting.':'No current partner recommendations match the stated needs.';
  return {score,recommendations:`Assessment: ${segment==='business'?'Business Credit Builder':'Personal Credit Builder'}\n${segment==='business'?'Business stage: '+val('businessStage')+'; EIN: '+val('hasEin')+'; bank account: '+val('businessBank')+'; business credit: '+val('businessHistory'):'Self-reported credit band: '+score+'; payment history: '+payment}\n\n${rec}\n\nAffiliate disclosure: We may earn a commission if you purchase through an affiliate link.`};
 }
 async function sendResults(payload){const res=await fetch('/.netlify/functions/send-results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.error||'Failed to send email');return data}
