@@ -40,13 +40,22 @@ exports.handler = async (event) => {
 
     const payload = JSON.parse(event.body || "{}");
     const email = String(payload.email || "").trim().toLowerCase();
+    if (payload.emailConsent !== true) {
+      return json(400, { success: false, error: "Consent to email this assessment is required." });
+    }
+    if (payload.website) { // Honeypot field for automated submissions
+      return json(400, { success: false, error: "Unable to process submission." });
+    }
     const firstName = String(payload.firstName || "there").trim();
     const lastName = String(payload.lastName || "").trim();
     const fullName = [firstName, lastName].filter(Boolean).join(" ");
     const score = payload.score || "Not provided";
     const recommendations = String(payload.recommendations || "").trim();
+    if (recommendations.length > 7000 || firstName.length > 100 || lastName.length > 100 || email.length > 254) {
+      return json(400, { success: false, error: "Submission exceeds permitted length." });
+    }
 
-    if (!email || !email.includes("@")) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return json(400, { success: false, error: "A valid email address is required." });
     }
 
@@ -69,9 +78,8 @@ exports.handler = async (event) => {
         attributes: {
           FIRSTNAME: firstName,
           LASTNAME: lastName,
-          FULLNAME: fullName,
-          SCORE: String(score),
-          SOURCE: "Credit Match Web App"
+          // Built-in Brevo contact fields; custom fields must be provisioned before use.
+          // Marketing consent is deliberately NOT inferred from assessment delivery.
         }
       })
     });
@@ -94,22 +102,22 @@ exports.handler = async (event) => {
           email: process.env.BREVO_SENDER_EMAIL || "creditkstp@gmail.com"
         },
         to: [{ email, name: fullName || firstName }],
-        subject: "Your Credit Match Tradeline Targets",
+        subject: "Your Credit Match Educational Assessment",
         htmlContent: `
           <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;max-width:620px;margin:auto;">
             <h2>Hello ${safeFirstName},</h2>
             <p>Your Credit Match profile has been processed.</p>
-            <p><strong>Estimated profile fit:</strong> ${safeScore}</p>
+            <p><strong>Self-reported credit score band:</strong> ${safeScore}</p>
             <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin:16px 0;">
               <pre style="white-space:pre-wrap;font-family:Arial,sans-serif;margin:0;">${safeRecommendations}</pre>
             </div>
-            <p><strong>Next step:</strong> Compare available tradelines that match your age, limit, and count targets.</p>
+            <p><strong>Optional next step:</strong> Compare the terms, risks, and costs of any service before deciding.</p>
             <p>
               <a href="${AFFILIATE_LINK}" style="background:#2563eb;color:white;text-decoration:none;padding:13px 18px;border-radius:12px;font-weight:bold;display:inline-block;">
                 View Tradeline Options
               </a>
             </p>
-            <p style="font-size:12px;color:#64748b;">Educational recommendation only. This is not a loan approval, credit repair guarantee, or financial advice.</p>
+            <p style="font-size:12px;color:#64748b;">Educational information only, not an approval, credit-score prediction, credit repair guarantee, or financial advice. Affiliate disclosure: Credit Match may earn a commission if you use a referral link. Authorized-user tradelines do not guarantee score improvements.</p>
           </div>
         `
       })
@@ -128,7 +136,9 @@ exports.handler = async (event) => {
       success: true,
       contactSaved: true,
       emailSent: true,
-      affiliateLink: AFFILIATE_LINK
+      affiliateLink: AFFILIATE_LINK,
+      marketingConsentReceived: payload.marketingConsent === true,
+      marketingAutomationEnabled: false
     });
   } catch (err) {
     return json(500, { success: false, error: err.message || "Unexpected server error." });
