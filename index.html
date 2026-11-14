@@ -10,12 +10,12 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar"><div class="brand">Credit Match</div><div class="pill">Personal + Business</div></div>
+  <div class="topbar"><div class="brand">Credit Match</div><a href="/learn.html" style="color:#fff;font-size:13px;font-weight:800;text-decoration:none">Free Credit Guides →</a></div>
   <div class="hero">
     <h1>Build stronger credit — personally or for your business</h1>
     <p>Choose the credit-building path that fits your goals. Compare education, tools, and relevant partner offers without guaranteed results or approval claims.</p>
     <div class="kpis"><div class="kpi"><div class="num">3</div><div class="lbl">Possible next steps</div></div><div class="kpi"><div class="num">Free</div><div class="lbl">Educational assessment</div></div></div>
-    <div class="lock-banner" style="margin-top:14px">Educational recommendations based on your answers — not credit scores, approval odds, or lender eligibility.</div>
+    <div class="lock-banner" style="margin-top:14px">Educational recommendations based on your answers — not credit scores, approval odds, or lender eligibility.</div><a href="/learn.html" class="btn secondary" style="margin-top:12px">Start with the free step-by-step guides</a>
   </div>
 
   <div class="card">
@@ -57,7 +57,7 @@ function setSegment(value){
  el('trackHelp').textContent=value==='personal'?'Learn about personal credit, existing debts, and responsible credit-building options.':'Build your business foundation, establish business credit history, and explore funding options when appropriate.';
  for(const id of ['summaryCard','resultsCard','emailSuccess'])el(id).classList.add('hidden');
 }
-el('personalTab').onclick=()=>setSegment('personal');el('businessTab').onclick=()=>setSegment('business');
+el('personalTab').onclick=()=>setSegment('personal');el('businessTab').onclick=()=>setSegment('business');if(new URLSearchParams(location.search).get('track')==='business')setSegment('business');
 const LINKS={tradeline:'https://www.tkqlhce.com/click-101773653-13503362',monitoring:'https://mandrillapp.com/track/click/31267418/myfreescorenow.com?p=eyJzIjoiTHVmZ1FwbllvVnlZOWpTZjF0SW1Fc29KNzAwIiwidiI6MSwicCI6IntcInVcIjozMTI2NzQxOCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL215ZnJlZXNjb3Jlbm93LmNvbVxcXC9yZWZlcmVuY2VBZmZpbGlhdGVSZXF1ZXN0XFxcL2JsWmxabkZ0V1RrPVwiLFwiaWRcIjpcImI0MWNiMjliNjgwZTQxNmE4MGFiNDMyNjU2NzEyYTJiXCIsXCJ1cmxfaWRzXCI6W1wiZjVmN2Y1NjA2ZTIyNjRlMmFkMTk0OTJkMTRhYTUyYjEzMzAwNWJhZFwiXX0ifQ',dispute:'https://disputebee.com/?ref=mzllmgy'};
 function ageTarget(v){if(v.includes('Needs work'))return'10–15 years';if(v.includes('Fair'))return'8–12 years';if(v.includes('Good'))return'6–10 years';return'9+ years'}
 function limitTarget(v){if(v.includes('Needs work'))return'$15,000–$25,000+';if(v.includes('Fair'))return'$10,000–$20,000';if(v.includes('Good'))return'$25,000+';return'$25,000+'}
