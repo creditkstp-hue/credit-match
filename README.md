@@ -24,3 +24,11 @@ Branch: `feature/credit-match-trust-and-consent`. No live site deploy has been p
 - Commission entries are individually recorded, not state transitions; do **not** double-enter the same conversion as pending and paid. Replace this workflow with idempotent status transitions before production financial reporting.
 - No purchase or live financial-service referral has been tested. Customer profile values are not saved in click records. Consent to receive an assessment is distinct from marketing opt-in.
 - Users should be offered genuine free options where appropriate, with no unsupported claim that a tradeline or dispute service improves credit.
+
+## Two separate customer journeys
+- **Personal Credit Builder:** asks about self-reported credit score band, utilization, account age, payment history, negative items, and consumer monitoring. Only personal-segment partner offers may appear.
+- **Business Credit Builder:** asks about business stage and entity type, EIN, separate bank account, monthly revenue, business credit history, monitoring, and funding interest. Only business-segment partner offers may appear.
+- Owner dashboard now includes a **Customer track** selector for each offer; business and personal offers share management and reporting but are filtered separately.
+- Existing three seed links remain **personal only**. There are **no verified business affiliate links configured yet**; the business track therefore displays an educational foundation checklist instead of an irrelevant offer.
+- Business offers must be added in the manager with the business segment after affiliate approval and checking partner program rules; do not treat them as lender eligibility decisions.
+- No customer's EIN, bank details, or full credit report are requested or stored. The assessment only uses the user's self-reported status answers to generate educational suggestions.
