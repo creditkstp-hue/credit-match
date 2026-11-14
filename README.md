@@ -49,3 +49,8 @@ Branch: `feature/credit-match-trust-and-consent`. No live site deploy has been p
 - Skool controls membership, fees, access and cancellation. Credit Match does not process or verify community purchases, membership status or Skool revenue.
 - Skool Growth may categorize signups driven by a direct website link as External website; confirm actual attribution in the Skool account.
 - This is a link integration, not automatic SSO, enrollment, or synchronization. Those would require an explicitly supported and authorized integration.
+
+## Funding referrals
+- `/funding.html`: separate personal and business funding readiness with purpose, amount, operating history and broad income/revenue bands. Processed only in client browser; no application, identity, banking or other data transmitted to third parties.
+- Funding referral programs and terms documented under `research/funding-referral-partners-2026-11-14.md`.
+- **Not a loan brokerage, underwriting or referral-fee processor** yet. Partners must approve links and payment terms, and legal requirements must be checked before live monetary referrals.
