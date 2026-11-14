@@ -32,3 +32,9 @@ Branch: `feature/credit-match-trust-and-consent`. No live site deploy has been p
 - Existing three seed links remain **personal only**. There are **no verified business affiliate links configured yet**; the business track therefore displays an educational foundation checklist instead of an irrelevant offer.
 - Business offers must be added in the manager with the business segment after affiliate approval and checking partner program rules; do not treat them as lender eligibility decisions.
 - No customer's EIN, bank details, or full credit report are requested or stored. The assessment only uses the user's self-reported status answers to generate educational suggestions.
+
+## Free self-service credit education
+- `/learn.html` is a no-login, no-payment education hub with separate personal and business credit checklists and common FAQs.
+- The landing page now links directly to the guides. Guide CTAs return visitors to the appropriate assessment track (`/?track=business` or `/?track=personal`).
+- Consumer references: CFPB rebuilding credit and AnnualCreditReport.com. Business references: SBA business credit setup, IRS EIN application. Visitors should not need paid referrals to learn the fundamentals.
+- The guide is static educational content; it is not a conversational chatbot, AI adviser, or individualized credit report review. Review content periodically for regulatory and vendor changes.
