@@ -1,27 +1,29 @@
 const {getStore}=require("@netlify/blobs");const crypto=require("node:crypto");
 const links={tradeline:'https://www.tkqlhce.com/click-101773653-13503362',monitoring:'https://mandrillapp.com/track/click/31267418/myfreescorenow.com?p=eyJzIjoiTHVmZ1FwbllvVnlZOWpTZjF0SW1Fc29KNzAwIiwidiI6MSwicCI6IntcInVcIjozMTI2NzQxOCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL215ZnJlZXNjb3Jlbm93LmNvbVxcXC9yZWZlcmVuY2VBZmZpbGlhdGVSZXF1ZXN0XFxcL2JsWmxabkZ0V1RrPVwiLFwiaWRcIjpcImI0MWNiMjliNjgwZTQxNmE4MGFiNDMyNjU2NzEyYTJiXCIsXCJ1cmxfaWRzXCI6W1wiZjVmN2Y1NjA2ZTIyNjRlMmFkMTk0OTJkMTRhYTUyYjEzMzAwNWJhZFwiXX0ifQ',dispute:'https://disputebee.com/?ref=mzllmgy'};
 const seed=[
-{id:"credit-monitoring",name:"Credit Monitoring",category:"monitoring",description:"Compare credit monitoring plans and fees.",url:links.monitoring,active:true,priority:90,goals:[],negativeRequired:false,monitoringRequired:true,disclosure:"Free reports are available at AnnualCreditReport.com. Compare renewal and cancellation terms."},
-{id:"dispute-tools",name:"Negative Item Review",category:"disputes",description:"Optional tools to organize credit report disputes.",url:links.dispute,active:true,priority:80,goals:[],negativeRequired:true,monitoringRequired:false,disclosure:"Disputing inaccurate information yourself is free. Accurate negative items are not automatically removable."},
-{id:"tradelines",name:"Tradeline Options",category:"credit_building",description:"Compare authorized-user tradeline services and risks.",url:links.tradeline,active:true,priority:50,goals:["Build credit"],negativeRequired:false,monitoringRequired:false,disclosure:"Paid authorized-user tradelines offer no guarantee of a score increase or lender acceptance."}];
+{id:"credit-monitoring",segment:"personal",name:"Credit Monitoring",category:"monitoring",description:"Compare credit monitoring plans and fees.",url:links.monitoring,active:true,priority:90,goals:[],negativeRequired:false,monitoringRequired:true,disclosure:"Free reports are available at AnnualCreditReport.com. Compare renewal and cancellation terms."},
+{id:"dispute-tools",segment:"personal",name:"Negative Item Review",category:"disputes",description:"Optional tools to organize credit report disputes.",url:links.dispute,active:true,priority:80,goals:[],negativeRequired:true,monitoringRequired:false,disclosure:"Disputing inaccurate information yourself is free. Accurate negative items are not automatically removable."},
+{id:"tradelines",segment:"personal",name:"Tradeline Options",category:"credit_building",description:"Compare authorized-user tradeline services and risks.",url:links.tradeline,active:true,priority:50,goals:["Build credit"],negativeRequired:false,monitoringRequired:false,disclosure:"Paid authorized-user tradelines offer no guarantee of a score increase or lender acceptance."}];
 const namespace=process.env.CONTEXT==="production"?"credit-match-affiliates":"credit-match-affiliates-"+(process.env.CONTEXT||"dev").replace(/[^a-z0-9-]/gi,"-");
 const store=()=>getStore(namespace);
 const response=(statusCode,data)=>({statusCode,headers:{"Content-Type":"application/json","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"},body:JSON.stringify(data)});
 const authorized=e=>{const key=process.env.CREDIT_MATCH_ADMIN_KEY||"",v=e.headers?.["x-admin-key"]||e.headers?.["X-Admin-Key"]||"";const a=Buffer.from(key),b=Buffer.from(v);return !!key&&a.length===b.length&&crypto.timingSafeEqual(a,b)};
 const offers=async()=>await store().get("catalog",{type:"json",consistency:"strong"})||seed;
-const safeOffer=o=>({id:o.id,name:o.name,description:o.description,disclosure:o.disclosure,category:o.category,clickUrl:"/.netlify/functions/affiliate?action=click&id="+encodeURIComponent(o.id)});
+const safeOffer=o=>({id:o.id,segment:o.segment,name:o.name,description:o.description,disclosure:o.disclosure,category:o.category,clickUrl:"/.netlify/functions/affiliate?action=click&id="+encodeURIComponent(o.id)});
 function validate(o){
 const id=String(o.id||"");if(!/^[a-z0-9-]{2,60}$/.test(id))throw Error("Invalid offer ID");
 const name=String(o.name||"").trim();if(name.length<2||name.length>100)throw Error("Invalid name");
 const u=new URL(o.url);if(u.protocol!=="https:"||u.username||u.password||["localhost","127.0.0.1"].includes(u.hostname))throw Error("A public HTTPS link is required");
-const allowed=["Build credit","Personal loan","Business funding","Credit card","Debt consolidation"];
-return {id,name,url:u.href,category:String(o.category||"other").slice(0,60),description:String(o.description||"").slice(0,600),disclosure:String(o.disclosure||"").slice(0,600),active:o.active===true,priority:Math.max(0,Math.min(100,Number(o.priority)||0)),goals:Array.isArray(o.goals)?o.goals.filter(x=>allowed.includes(x)):[],negativeRequired:o.negativeRequired===true,monitoringRequired:o.monitoringRequired===true};
+const allowed=["Build credit","Personal loan","Business funding","Credit card","Debt consolidation","Build business credit","Business credit monitoring","Business credit card"];const segment=String(o.segment||"personal");if(!["personal","business"].includes(segment))throw Error("Choose personal or business segment");
+return {id,name,segment,url:u.href,category:String(o.category||"other").slice(0,60),description:String(o.description||"").slice(0,600),disclosure:String(o.disclosure||"").slice(0,600),active:o.active===true,priority:Math.max(0,Math.min(100,Number(o.priority)||0)),goals:Array.isArray(o.goals)?o.goals.filter(x=>allowed.includes(x)):[],negativeRequired:o.negativeRequired===true,monitoringRequired:o.monitoringRequired===true};
 }
 function fits(o,p){
 if(!o.active)return false;
+if((o.segment||"personal")!==(p.segment||"personal"))return false;
 if(o.goals.length&&!o.goals.includes(p.goalType))return false;
 if(o.negativeRequired&&!(Array.isArray(p.negativeItems)&&p.negativeItems.some(x=>x!=="None")))return false;
 if(o.monitoringRequired&&!(p.creditMonitoring==="No"||["Never","Only before applying"].includes(p.creditCheckFrequency)))return false;
+if(o.segment==="business"&&p.businessStage==="Not started"&&o.category==="business_funding")return false;
 return true;
 }
 async function records(prefix){const s=store();const r=await s.list({prefix});return Promise.all(r.blobs.slice(0,10000).map(x=>s.get(x.key,{type:"json"})));}
@@ -30,7 +32,7 @@ const action=e.queryStringParameters?.action||"";
 try{
 if(action==="match"&&e.httpMethod==="POST"){
 if((e.body||"").length>10000)return response(413,{error:"Too large"});
-const profile=JSON.parse(e.body||"{}");
+const profile=JSON.parse(e.body||"{}");if(!profile||!["personal","business"].includes(profile.segment))return response(400,{error:"Choose a credit-building track"});
 const applicable=(await offers()).filter(x=>fits(x,profile)).sort((a,b)=>b.priority-a.priority).slice(0,5).map(safeOffer);
 return response(200,{offers:applicable,notice:"Recommendations based on self-reported needs, not eligibility or approval likelihood."});
 }
